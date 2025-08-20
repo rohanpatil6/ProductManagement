@@ -1,0 +1,208 @@
+﻿@model ProductManagement.PMModels.DashboardVM
+@{
+    ViewData["Title"] = "Product Catalog Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4 text-center">📦 Product Catalog Management Dashboard</h2>
+<hr />
+
+<div class="container">
+
+    <!-- ====================== Categories ====================== -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white fw-bold">Categories</div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm text-center">
+                <thead class="table-light">
+                    <tr><th>ID</th><th>Name</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.Categories)
+                    {
+                        <tr>
+                            <td>@c.Id</td>
+                            <td>@c.Name</td>
+                            <td>
+                                <form asp-action="DeleteCategory" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@c.Id" />
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <form asp-action="CreateCategory" method="post" class="row g-2">
+                <div class="col-md-8">
+                    <input type="text" name="Name" class="form-control" placeholder="Category Name" required />
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success w-100">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====================== Attributes ====================== -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white fw-bold">Attributes</div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm text-center">
+                <thead class="table-light">
+                    <tr><th>ID</th><th>Name</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model.Attributes)
+                    {
+                        <tr>
+                            <td>@a.Id</td>
+                            <td>@a.Name</td>
+                            <td>
+                                <form asp-action="DeleteAttribute" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@a.Id" />
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <form asp-action="CreateAttribute" method="post" class="row g-2">
+                <div class="col-md-8">
+                    <input type="text" name="Name" class="form-control" placeholder="Attribute Name" required />
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success w-100">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====================== Category Attributes ====================== -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning fw-bold">Category - Attribute Mapping</div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm text-center">
+                <thead class="table-light">
+                    <tr><th>ID</th><th>Category</th><th>Attribute</th><th>Data Type</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var ca in Model.CategoryAttributes)
+                    {
+                        <tr>
+                            <td>@ca.Id</td>
+                            <td>@ca.Category?.Name</td>
+                            <td>@ca.Attribute?.Name</td>
+                            <td>@ca.DataType</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <form asp-action="CreateCategoryAttribute" method="post" class="row g-2">
+                <div class="col-md-3">
+                    <input type="number" name="CategoryId" class="form-control" placeholder="Category Id" required />
+                </div>
+                <div class="col-md-3">
+                    <input type="number" name="AttributeId" class="form-control" placeholder="Attribute Id" required />
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="DataType" class="form-control" placeholder="Data Type" required />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-warning w-100">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====================== Products ====================== -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white fw-bold">Products</div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm text-center">
+                <thead class="table-light">
+                    <tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Description</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.Products)
+                    {
+                        <tr>
+                            <td>@p.Id</td>
+                            <td>@p.Name</td>
+                            <td>@p.Category?.Name</td>
+                            <td>@p.Price?.ToString("C")</td>
+                            <td>@p.Description</td>
+                            <td>
+                                <form asp-action="DeleteProduct" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@p.Id" />
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <form asp-action="CreateProduct" method="post" class="row g-2">
+                <div class="col-md-3">
+                    <input type="text" name="Name" class="form-control" placeholder="Product Name" required />
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="CategoryId" class="form-control" placeholder="Category Id" required />
+                </div>
+                <div class="col-md-2">
+                    <input type="number" step="0.01" name="Price" class="form-control" placeholder="Price" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="Description" class="form-control" placeholder="Description" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-info w-100">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====================== Product Attribute Values ====================== -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white fw-bold">Product Attribute Values</div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm text-center">
+                <thead class="table-light">
+                    <tr><th>ID</th><th>Product</th><th>Attribute</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var pav in Model.ProductAttributeValues)
+                    {
+                        <tr>
+                            <td>@pav.Id</td>
+                            <td>@pav.Product?.Name</td>
+                            <td>@pav.Attribute?.Name</td>
+                            <td>@pav.Value</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <form asp-action="SaveProductAttributeValue" method="post" class="row g-2">
+                <div class="col-md-3">
+                    <input type="number" name="ProductId" class="form-control" placeholder="Product Id" required />
+                </div>
+                <div class="col-md-3">
+                    <input type="number" name="AttributeId" class="form-control" placeholder="Attribute Id" required />
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="Value" class="form-control" placeholder="Value" required />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-secondary w-100">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
